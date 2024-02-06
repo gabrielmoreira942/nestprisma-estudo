@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          BigInt  @id @default(autoincrement())
+  title       String
+  description String
+  check       Boolean
+  Group       Group[]
+
+  @@map("task")
+}
+
+model Group {
+  id     BigInt @id @default(autoincrement())
+  name   String @unique
+  task   Task   @relation(fields: [taskId], references: [id])
+  taskId BigInt @map("task_id")
+
+  // unity Unity @relation(fields: [unityId], references: [id])
+  // unityId BigInt @map("unity_id")
+  @@map("group")
+}
